@@ -6,12 +6,6 @@ Books API developed with TypeScript, Express and Prisma ORM that allows the user
 5. get all the books by author
 6. get all the books by genre
 
-Dependencies:
-1. express
-2. dotenv
-3. bodyparser
-4. prisma
-
 Start:
 ```
 npm run start
