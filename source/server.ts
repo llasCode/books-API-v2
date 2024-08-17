@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import logging from './config/logging';
 import config from './config/config';
 import bookRoutes from './routes/book';
+import authorRoutes from './routes/author';
+import genreRoutes from './routes/genre';
 
 const NAMESPACE = 'Server';
 const app = express();
@@ -38,6 +40,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/books', bookRoutes);
+app.use('/authors', authorRoutes);
+app.use('/genre', genreRoutes);
 
 // Error handling
 app.use((req, res, next) => {

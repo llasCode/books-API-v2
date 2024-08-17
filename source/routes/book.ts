@@ -4,33 +4,29 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.get('/get/books', async (req, res) => {
+router.get('/', async (req, res) => {
     const books = await prisma.book.findMany();
     res.json(books);
 });
 
-router.post('/create/book', async (req, res) => {
+router.post('/', async (req, res) => {
     const { title, author, genre } = req.body;
-    await prisma.book.create({
+    const book = await prisma.book.create({
         data: {
             title,
             author,
             genre
         }
     });
-    res.status(200).json({});
+    res.status(201).json(book);
 });
 
-router.put('/edit/book', async (req, res) => {
-    const { id } = req.query;
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
     const { author, title, genre } = req.body;
 
-    if (typeof id !== 'string') {
-        return res.status(400).json({ error: 'Invalid or missing book' });
-    }
-
     const numericId = Number(id);
-    await prisma.book
+    const book = await prisma.book
         .update({
             where: {
                 id: numericId
@@ -47,18 +43,14 @@ router.put('/edit/book', async (req, res) => {
                 error
             });
         });
-    res.status(200).json({});
+    res.status(200).json(book);
 });
 
-router.delete('/delete/book', async (req, res) => {
-    const { id } = req.query;
-
-    if (typeof id !== 'string') {
-        res.status(400).json({ error: 'Invalid or missing book' });
-    }
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
     const numericId = Number(id);
 
-    await prisma.book
+    const book = await prisma.book
         .delete({
             where: {
                 id: numericId
@@ -70,15 +62,11 @@ router.delete('/delete/book', async (req, res) => {
                 error
             });
         });
-    res.status(200).json({});
+    res.status(200).json(book);
 });
 
-router.get('/get/infoBook', async (req, res) => {
-    const { id } = req.query;
-
-    if (typeof id !== 'string') {
-        return res.status(400).json({ error: 'Invalid or missing id' });
-    }
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
     const numericId = Number(id);
 
     const books = await prisma.book
@@ -96,32 +84,10 @@ router.get('/get/infoBook', async (req, res) => {
     res.json(books);
 });
 
-router.get('/get/getAuthorBooks', async (req, res) => {
-    const { author } = req.query;
-    if (typeof author !== 'string') {
-        return res.status(400).json({ error: 'Invalid or missing author' });
-    }
 
-    const books = await prisma.book
-        .findMany({
-            where: {
-                author
-            }
-        })
-        .catch((error) => {
-            res.status(500).json({
-                message: error.message,
-                error
-            });
-        });
-    res.json(books);
-});
 
-router.get('/get/getGenreBooks', async (req, res) => {
-    const { genre } = req.query;
-    if (typeof genre !== 'string') {
-        return res.status(400).json({ error: 'Invalid or missing genre' });
-    }
+router.get('/:genre', async (req, res) => {
+    const { genre } = req.params;
 
     const books = await prisma.book
         .findMany({
