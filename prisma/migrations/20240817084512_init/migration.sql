@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Book" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "author" TEXT NOT NULL,
     "genre" TEXT NOT NULL
