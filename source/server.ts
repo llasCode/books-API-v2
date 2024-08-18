@@ -55,3 +55,5 @@ app.use((req, res, next) => {
 // Create server
 logging.info(NAMESPACE, `Server running on ${config.server.hostname}:${config.server.port}`);
 app.listen(config.server.port);
+
+console.log("");
